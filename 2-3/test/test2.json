@@ -1,0 +1,11 @@
+{
+	"name" : "brainteaser",
+	"brainteaser": {
+		"description": "какой камень в воде?",
+		"input": {
+			"type": "text",
+			"name": "answer"
+		},
+		"result": "мокрый"
+	}
+}
