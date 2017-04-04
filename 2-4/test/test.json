@@ -1,0 +1,11 @@
+{
+	"name" : "calculate",
+	"calculate": {
+		"description": "2+2=?",
+		"input": {
+			"type": "text",
+			"name": "summ"
+		},
+		"result": 4
+	}
+}
