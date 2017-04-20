@@ -25,7 +25,7 @@ $pdo = new PDO("mysql:host=localhost;dbname=global;charset=utf8", "zenkin", "net
 $pdo ->exec("SET NAMES utf8");
 if ($quantityRequest == 1) {
 	$sql = "SELECT * FROM books WHERE {$serchParametres[0]} LIKE :search";
-	$searchData = $serchParametres[1]."%";
+	$searchData = '%'.$serchParametres[1]."%";
 	$statement = $pdo->prepare($sql);
 	$statement->execute(["search" => "$searchData"]);
 } else if ($quantityRequest > 1) {
@@ -34,12 +34,11 @@ if ($quantityRequest == 1) {
 	for ($z=0; $z < count($serchParametres);) {
 		if ($z != (count($serchParametres)-2)) {
 			$serchData = ":searchData".($z+1);
-			$searchData = $serchParametres[$z+1]."%";
+			$searchData = '%'.$serchParametres[$z+1]."%";
 			$sql .= "{$serchParametres[$z]} LIKE '{$searchData}' AND ";
 		} else {
-			$searchData = $serchParametres[$z+1]."%";
+			$searchData = '%'.$serchParametres[$z+1]."%";
 			$sql .= "{$serchParametres[$z]} LIKE '{$searchData}'";
-			$searchpole = $serchParametres[1]."%";
 		}
 	 	$z+=2;
 	}
