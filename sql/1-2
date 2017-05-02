@@ -1,0 +1,127 @@
+<?php
+	$insert = "display: block;";
+	$edit = "display: none;";
+	$valueForEdit = "";
+
+	$pdo = new PDO("mysql:host=localhost;dbname=zenkin;charset=utf8", "zenkin", "neto0677", [
+		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+	]);
+
+	if(!empty($_GET['action'])) {
+		$missionId = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
+		if($_GET['action'] == "done") {
+			$completeMission = "UPDATE tasks SET is_done = '1' WHERE id = :missionid";
+			$statement = $pdo->prepare($completeMission);
+			$statement->execute(["missionid" => "$missionId"]);
+		} else if ($_GET['action'] == "delete") {
+			$completeMission = "DELETE FROM tasks WHERE id = :missionid";
+			$statement = $pdo->prepare($completeMission);
+			$statement->execute(["missionid" => "$missionId"]);
+		} else if ($_GET['action'] == "edit") {
+			$insert = ifEdit("false");
+			$edit = ifEdit("true");
+			$descriptionForEdit = "SELECT description FROM tasks WHERE id = :missionid";
+			$statement = $pdo->prepare($descriptionForEdit);
+			$statement->execute(["missionid" => "$missionId"]);
+			$valueForEdit = $statement->fetch();
+		}
+	}
+
+	if (!empty($_POST['missionName'])) {
+		$missionDecription = filter_input(INPUT_POST, "missionName", FILTER_SANITIZE_STRING);$_POST['missionName'];
+		$createDate = date("Y-m-d H:m:s");
+		$isDone = 0;
+		$createMission = "INSERT INTO tasks (description, is_done, date_added) VALUES (:description, :isdone, :createdate)";
+		$statement = $pdo->prepare($createMission);
+		$statement->execute(["description" => "$missionDecription", "isdone" => "$isDone", "createdate" => "$createDate"]);
+	}
+
+	if (!empty($_POST['missionNameChandge'])) {
+		$insert = ifEdit("true");
+		$edit = ifEdit("false");
+		$editId = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
+		$newMissionDecription = filter_input(INPUT_POST, "missionNameChandge", FILTER_SANITIZE_STRING);
+		$chandgeMissionDecription = "UPDATE tasks SET description = :newmissiondesc WHERE id = :missionid";
+		$statement = $pdo->prepare($chandgeMissionDecription);
+		$statement->execute(["newmissiondesc" => "$newMissionDecription", "missionid" => "$editId"]);
+		header('Location: http://university.netology.ru/u/zenkin/SQL/1-2/sql/index.php');
+    	exit();
+	}	
+
+
+	function ifEdit($value) {
+		return $value == "true" ? "display: block;" : "display: none;";
+	}
+
+	function isDone($status) {
+		return $status != 0 ? "color: green;" : "color: orange;";
+	}
+
+	$sql = "SELECT * FROM tasks";
+	$statement = $pdo->prepare($sql);
+	$statement->execute();
+
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Форма теста</title>
+		<style type="text/css">
+			table {
+				border-collapse: collapse;
+			}
+			td, th {
+				border: 1px solid black;
+				padding: 2px 4px;
+			}
+			th {
+				background-color: grey;
+			}
+			td > a {
+				margin-right: 5px;
+			}
+		</style>
+	</head>
+	<body>
+	<h2>Список дел на сегодня</h2>
+		<form method="POST" style="margin: 50px 0px 20px 0px; <?= $insert?>">
+			<span>
+				<input type="text" name="missionName" placeholder="Описание задачи">
+			</span>
+			<span>
+				<button type="submit">Добавить</button>
+			</span>
+		</form>
+		<form method="POST" style="margin: 50px 0px 20px 0px; <?= $edit?>">
+			<span>
+				<input type="text" name="missionNameChandge" placeholder="Описание задачи" value="<?= $valueForEdit[0] ?>">
+			</span>
+			<span>
+				<button type="submit">Сохранить</button>
+			</span>
+		</form>
+		<table>
+			<thead>
+				<th>Описание задачи</th>
+				<th>Дата добавления</th>
+				<th>Статус</th>
+				<th>Действия</th>
+			</thead>
+			<tbody>
+				<?php foreach ($statement as $row):?>
+					<tr>
+						<td><?= htmlspecialchars($row["description"], ENT_QUOTES) ?></td>
+						<td><?= htmlspecialchars($row["date_added"], ENT_QUOTES) ?></td>
+						<td style="<?= isDone(htmlspecialchars($row["is_done"], ENT_QUOTES))?>"><?= htmlspecialchars($row["is_done"], ENT_QUOTES) == 0 ? "Не выполнено" : "Выполенено" ?></td>
+						<td>
+							<a href="?id=<?=htmlspecialchars($row["id"])?>&action=edit">Изменить</a>
+							<a href="?id=<?=htmlspecialchars($row["id"])?>&action=done">Выполнить</a>
+							<a href="?id=<?=htmlspecialchars($row["id"])?>&action=delete">Удалить</a>
+						</td>
+					</tr>
+				<?php endforeach ?>
+			</tbody>
+		</table>
+	</body>
+</html>
