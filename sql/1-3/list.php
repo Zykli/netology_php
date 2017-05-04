@@ -6,7 +6,15 @@
 
 	function getLoggedUser() {
 	  return !empty($_SESSION['user']) ? $_SESSION['user'] : null;
-	}	
+	}
+	function isLogged() {
+	  return !empty($_SESSION['user']);
+	}
+
+	if(!isLogged()) {
+		header('Location: http://university.netology.ru/u/zenkin/SQL/1-3/login.php');
+    	exit();
+	}
 
 	$insert = "display: block;";
 	$edit = "display: none;";
@@ -196,20 +204,6 @@
 				<?php endforeach ?>
 			</tbody>
 		</table>
-
-		<br>
-		<br>
-		<table>
-			<?php foreach ($userTable as $rowUser):?>
-				<tr>
-					<td><?= htmlspecialchars($rowUser["id"], ENT_QUOTES) ?></td>
-					<td><?= htmlspecialchars($rowUser["login"], ENT_QUOTES) ?></td>
-					<td><?= htmlspecialchars($rowUser["password"], ENT_QUOTES) ?></td>
-				</tr>
-			<?php endforeach ?>
-		</table>
-		<br>
-		<br>
 		<div>
 			<a href="http://university.netology.ru/u/zenkin/SQL/1-3/logout.php">Выйти</a>
 		</div>
