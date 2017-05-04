@@ -10,6 +10,7 @@
 		$userInsert = "INSERT INTO user (login, password) VALUES (:login, :password)";
 		$statement = $pdo->prepare($userInsert);
 		$statement->execute(["login" => "$userName", "password" => "$userPass"]);
+		echo "Регистрация успешна"ж
 	}
 	if(!empty($_POST['loginButton'])) {
 		$userName = filter_input(INPUT_POST, "login", FILTER_SANITIZE_STRING);
