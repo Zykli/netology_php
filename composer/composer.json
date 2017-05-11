@@ -1,0 +1,13 @@
+{
+    "name": "zykli/system32",
+    "authors": [
+        {
+            "name": "Mihail Zenkin",
+            "email": "ZykliZen@gmail.com"
+        }
+    ],
+    "require": {
+    	"php" : "> 5.3.0",
+        "yandex/geo": "^1.1"
+    }
+}
