@@ -1,0 +1,23 @@
+[
+  {
+    "question": "Чему равно 2 + 2?",
+    "type": "text",
+    "name": 1,
+    "id": "answer_1",
+    "result": "4"
+  },
+  {
+    "question": "Чему равно 2 - 2?",
+    "type": "text",
+    "name": 2,
+    "id": "answer_2",
+    "result": "0"
+  },
+  {
+    "question": "Чему равно 2 + 2 * 2?",
+    "type": "text",
+    "name": 3,
+    "id": "answer_3",
+    "result": "6"
+  }
+]
