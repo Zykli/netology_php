@@ -1,0 +1,11 @@
+{
+	"name" : "calculate3",
+	"calculate3": {
+		"description": "3+3=?",
+		"input": {
+			"type": "text",
+			"name": "summ"
+		},
+		"result": 6
+	}
+}
